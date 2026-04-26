@@ -1,0 +1,9 @@
+[2026-04-25 22:44:54] INFO: Cliente guardado ID 1193235860
+[2026-04-25 22:47:00] ERROR: Intento de cliente duplicado ID 1193235860
+[2026-04-25 22:47:50] INFO: Cliente guardado ID 1
+[2026-04-25 22:47:50] INFO: Cliente guardado ID 2
+[2026-04-25 22:48:08] ERROR: Intento de cliente duplicado ID 1
+[2026-04-25 23:12:14] INFO: Cliente guardado ID 1
+[2026-04-25 23:12:38] INFO: Cliente guardado ID 1
+[2026-04-25 23:13:43] ERROR: Cliente duplicado ID 1
+[2026-04-25 23:16:09] ERROR: Cliente duplicado ID 1

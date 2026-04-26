@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1010,
+        "nombre": "Alda",
+        "telefono": "300123",
+        "email": "mail@gmail.com",
+        "tipo": "premium"
+    },
+    {
+        "id": 1,
+        "nombre": "Alda",
+        "telefono": "300123",
+        "email": "mail@gmail.com",
+        "tipo": "premium"
+    }
+]
