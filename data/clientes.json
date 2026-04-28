@@ -1,23 +1,16 @@
 [
     {
-        "id": 1193,
-        "nombre": "Test Cliente",
-        "telefono": "3105462145",
-        "email": "test@hotmail.com",
+        "id": 1193235456,
+        "nombre": "Andres Perez",
+        "telefono": "3015469874",
+        "email": "andrestest@gmail.com",
+        "tipo": "premium"
+    },
+    {
+        "id": 100548568745,
+        "nombre": "Rosa Test",
+        "telefono": "3105412654",
+        "email": "rosapenela@gmail.com",
         "tipo": "normal"
-    },
-    {
-        "id": 1101,
-        "nombre": "Test 2",
-        "telefono": "3105468795",
-        "email": "test211@gmail.com",
-        "tipo": "premium"
-    },
-    {
-        "id": 1193235860,
-        "nombre": "Aldair Sierra",
-        "telefono": "3013669799",
-        "email": "aldast@gmail.com",
-        "tipo": "premium"
     }
 ]

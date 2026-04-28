@@ -34,3 +34,5 @@
 [2026-04-27 14:53:24] INFO: Cliente guardado ID 1193
 [2026-04-27 20:16:22] INFO: Cliente guardado ID 1101
 [2026-04-27 21:44:48] INFO: Cliente guardado ID 1193235860
+[2026-04-27 22:26:47] INFO: Cliente guardado ID 1193235456
+[2026-04-27 22:27:27] INFO: Cliente guardado ID 100548568745
