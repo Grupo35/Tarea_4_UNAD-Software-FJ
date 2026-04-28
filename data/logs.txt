@@ -1,9 +1,36 @@
-[2026-04-25 22:44:54] INFO: Cliente guardado ID 1193235860
-[2026-04-25 22:47:00] ERROR: Intento de cliente duplicado ID 1193235860
-[2026-04-25 22:47:50] INFO: Cliente guardado ID 1
-[2026-04-25 22:47:50] INFO: Cliente guardado ID 2
-[2026-04-25 22:48:08] ERROR: Intento de cliente duplicado ID 1
-[2026-04-25 23:12:14] INFO: Cliente guardado ID 1
-[2026-04-25 23:12:38] INFO: Cliente guardado ID 1
-[2026-04-25 23:13:43] ERROR: Cliente duplicado ID 1
-[2026-04-25 23:16:09] ERROR: Cliente duplicado ID 1
+[2026-04-27 13:30:54] INFO: Cliente guardado ID 1193
+[2026-04-27 13:31:16] ERROR: Cliente duplicado ID 1193
+[2026-04-27 13:37:55] ERROR: Cliente duplicado ID 1193
+[2026-04-27 13:40:40] ERROR: Cliente duplicado ID 1193
+[2026-04-27 13:40:40] ERROR: Cliente duplicado ID 1193
+[2026-04-27 13:46:45] INFO: Cliente guardado ID 1104
+[2026-04-27 13:46:50] ERROR: Cliente duplicado ID 1104
+[2026-04-27 13:47:01] ERROR: Cliente duplicado ID 1104
+[2026-04-27 13:48:10] INFO: Cliente guardado ID 11052
+[2026-04-27 13:48:13] ERROR: Cliente duplicado ID 11052
+[2026-04-27 13:48:15] ERROR: Cliente duplicado ID 11052
+[2026-04-27 13:48:18] ERROR: Cliente duplicado ID 11052
+[2026-04-27 13:48:19] ERROR: Cliente duplicado ID 11052
+[2026-04-27 14:20:24] INFO: Cliente guardado ID 1106
+[2026-04-27 14:20:29] ERROR: Cliente duplicado ID 1106
+[2026-04-27 14:20:34] ERROR: Cliente duplicado ID 1106
+[2026-04-27 14:20:37] ERROR: Cliente duplicado ID 1106
+[2026-04-27 14:21:43] ERROR: Cliente duplicado ID 1106
+[2026-04-27 14:22:06] INFO: Cliente guardado ID 1194
+[2026-04-27 14:22:09] ERROR: Cliente duplicado ID 1194
+[2026-04-27 14:22:10] ERROR: Cliente duplicado ID 1194
+[2026-04-27 14:22:12] ERROR: Cliente duplicado ID 1194
+[2026-04-27 14:25:24] ERROR: Cliente duplicado ID 1194
+[2026-04-27 14:25:30] INFO: Cliente guardado ID 11988
+[2026-04-27 14:27:58] ERROR: Error guardando cliente: [Errno 2] No such file or directory: 'data/clientes.json'
+[2026-04-27 14:27:58] ERROR: Error guardando cliente: [Errno 2] No such file or directory: 'data/clientes.json'
+[2026-04-27 14:27:59] ERROR: Error guardando cliente: [Errno 2] No such file or directory: 'data/clientes.json'
+[2026-04-27 14:28:03] ERROR: Error guardando cliente: [Errno 2] No such file or directory: 'data/clientes.json'
+[2026-04-27 14:28:14] ERROR: Error guardando cliente: [Errno 2] No such file or directory: 'data/clientes.json'
+[2026-04-27 14:42:28] INFO: Cliente guardado ID 1193
+[2026-04-27 14:43:34] INFO: Cliente guardado ID 2423
+[2026-04-27 14:48:32] INFO: Cliente guardado ID 5555
+[2026-04-27 14:51:56] INFO: Cliente guardado ID 1194541
+[2026-04-27 14:53:24] INFO: Cliente guardado ID 1193
+[2026-04-27 20:16:22] INFO: Cliente guardado ID 1101
+[2026-04-27 21:44:48] INFO: Cliente guardado ID 1193235860

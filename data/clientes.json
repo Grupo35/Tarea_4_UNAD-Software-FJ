@@ -1,16 +1,23 @@
 [
     {
-        "id": 1010,
-        "nombre": "Alda",
-        "telefono": "300123",
-        "email": "mail@gmail.com",
+        "id": 1193,
+        "nombre": "Test Cliente",
+        "telefono": "3105462145",
+        "email": "test@hotmail.com",
+        "tipo": "normal"
+    },
+    {
+        "id": 1101,
+        "nombre": "Test 2",
+        "telefono": "3105468795",
+        "email": "test211@gmail.com",
         "tipo": "premium"
     },
     {
-        "id": 1,
-        "nombre": "Alda",
-        "telefono": "300123",
-        "email": "mail@gmail.com",
+        "id": 1193235860,
+        "nombre": "Aldair Sierra",
+        "telefono": "3013669799",
+        "email": "aldast@gmail.com",
         "tipo": "premium"
     }
 ]
