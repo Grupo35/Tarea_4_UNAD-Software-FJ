@@ -12,5 +12,19 @@
         "telefono": "3105412654",
         "email": "rosapenela@gmail.com",
         "tipo": "normal"
+    },
+    {
+        "id": 1105,
+        "nombre": "Esther Aldana",
+        "telefono": "3013224569",
+        "email": "estheral@yahoo.com",
+        "tipo": "premium"
+    },
+    {
+        "id": 92054698,
+        "nombre": "Fernando Sanchez",
+        "telefono": "3104568799",
+        "email": "fernando@outlok.com",
+        "tipo": "normal"
     }
 ]

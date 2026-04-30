@@ -44,15 +44,16 @@ class Servicio(ABC):
 
         self.__nombre = valor.strip()
 
+    @abstractmethod
     def describir(self):
-        return f"Servicio: {self.__nombre} (ID: {self.__id})"
+        pass
 
     @abstractmethod
     def calcular_costos(self):
         pass
 
     @abstractmethod
-    def calcular_descuento(self, cupon=False, cliente_premium=False):
+    def calcular_costo_final(self, cupon=False, cliente_premium=False):
         pass
 
 
@@ -69,9 +70,19 @@ class ServicioSala(Servicio):
 
     @horas.setter
     def horas(self, valor):
-        if not isinstance(valor, (int, float)):
-            raise ValueError("Las horas deben ser numéricas")
-
+        
+        if valor is None:
+            self.__horas = None #variable no difinida 
+            return
+        
+        if valor is None or valor == "":
+            raise ValueError("Las horas no pueden estar vacías")
+            
+        try:
+            valor = int(valor)
+        except (TypeError, ValueError):
+            raise ValueError("Las horas deben ser un número válido")
+        
         if valor <= 0:
             raise ValueError("Las horas deben ser mayores a 0")
 
@@ -83,7 +94,7 @@ class ServicioSala(Servicio):
 
     @tarifa_por_hora.setter
     def tarifa_por_hora(self, valor):
-        if not isinstance(valor, (int, float)):
+        if not isinstance(valor, (int)):
             raise ValueError("La tarifa debe ser numérica")
 
         if valor <= 0:
@@ -94,24 +105,24 @@ class ServicioSala(Servicio):
     def calcular_costos(self):
         return self.__horas * self.__tarifa_por_hora
 
-    def calcular_descuento(self, cupon=False, cliente_premium=False):
+    def calcular_costo_final(self, cupon=False, cliente_premium=False):
         costo = self.calcular_costos()
-        descuento = 0
-
+      
         if cupon:
-            descuento += costo * 0.05
+            costo -= costo * 0.05
+             # si tiene cupon se descuenta el porcentaje indicado
 
         if cliente_premium:
-            descuento += costo * 0.10
+            costo += costo * 0.10
+            #si es premium se monta un recargo
+        
+        return costo
 
-        return costo - descuento
+        
 
     def describir(self):
         return (
-            f"{super().describir()} | "
-            f"Horas: {self.__horas} | "
-            f"Tarifa: {self.__tarifa_por_hora} | "
-            f"Total: {self.calcular_costos()}"
+            f"Horas: {self.horas}"
         )
         
   #-------------------------------------------------------------------
@@ -136,6 +147,11 @@ class ServicioEquipo(Servicio):
         
     @dias.setter
     def dias(self, valor):
+        
+        if valor is None:
+            self.__dias = None #variable no difinida 
+            return
+        
         if not isinstance(valor, (int, float)):
             raise ValueError("Días deben ser númericos")
             
@@ -150,7 +166,7 @@ class ServicioEquipo(Servicio):
         
     @tarifa_dia.setter
     def tarifa_dia(self, valor):
-        if not isinstance(valor, (int, float)):
+        if not isinstance(valor, (int)):
             raise ValueError("La tarifa debe ser numérica")
             
         if valor <= 0:
@@ -164,6 +180,11 @@ class ServicioEquipo(Servicio):
         
     @cantidad.setter
     def cantidad(self, valor):
+        
+        if valor is None:
+            self.__cantidad = None #variable no difinida 
+            return
+        
         if not isinstance(valor, (int, float)):
             raise ValueError("La cantidad debe ser un entero")
             
@@ -180,24 +201,24 @@ class ServicioEquipo(Servicio):
             print("Error calculando costos:", e)
             return 0
         
-    def calcular_descuento(self, cupon=False, cliente_premium=False):
+    def calcular_costo_final(self, cupon=False, cliente_premium=False):
         costo = self.calcular_costos()
-        descuento = 0
-            
+      
         if cupon:
-            descuento += costo * 0.10
-                
+            costo -= costo * 0.05
+             # si tiene cupon se descuenta el porcentaje indicado
+
         if cliente_premium:
-            descuento += costo * 0.15
-            
-        return costo - descuento
+            costo += costo * 0.15
+            #si es premium se monta un recargo
+        
+        return costo
         
     def describir(self):
-         return (f"{super().describir()} |"
-                f"Equipo: {self.__tipo_equipo} | "
+         return (
                 f"Dias: {self.__dias} |"
                 f"Cantidad: {self.__cantidad} |"
-                f"Total: {self.calcular_costos()}")
+         )
 
   #-------------------------------------------------------------------
   #-----------------------Asesorías especializadas--------------------
@@ -222,13 +243,23 @@ class ServicioAsesoria(Servicio):
     
     @horas.setter
     def horas(self, valor):
-         if not isinstance(valor, (int, float)):
-            raise ValueError("Las horas deben ser númericas")
+        
+        if valor is None:
+            self.__horas = None #variable no difinida 
+            return
+        
+        if valor is None or valor == "":
+            raise ValueError("Las horas no pueden estar vacías")
             
-         if valor <= 0:
-            raise ValueError("Las horas deben deben ser mayores a 0")
-            
-         self.__horas = valor
+        try:
+            valor = int(valor)
+        except (TypeError, ValueError):
+            raise ValueError("Las horas deben ser un número válido")
+        
+        if valor <= 0:
+            raise ValueError("Las horas deben ser mayores a 0")
+
+        self.__horas = valor
          
     @property
     def tarifa_horas(self):
@@ -236,7 +267,7 @@ class ServicioAsesoria(Servicio):
     
     @tarifa_horas.setter
     def tarifa_horas(self, valor):
-         if not isinstance(valor, (int, float)):
+         if not isinstance(valor, (int)):
             raise ValueError("Tarifas deben ser númericas")
             
          if valor <= 0:
@@ -244,27 +275,31 @@ class ServicioAsesoria(Servicio):
             
          self.__tarifa_horas = valor
          
+    @property
+    def nivel(self):
+        return self.__nivel
+         
     def calcular_costos(self):
         return self.__horas * self.__tarifa_horas
     
-    def calcular_descuento(self, cupon=False, cliente_premium=False):
+    def calcular_costo_final(self, cupon=False, cliente_premium=False):
         costo = self.calcular_costos()
-        descuento = 0
-        
+      
         if cupon:
-            descuento += costo * 0.04
-                
+            costo -= costo * 0.10
+             # si tiene cupon se descuenta el porcentaje indicado
+
         if cliente_premium:
-            descuento += costo * 0.12
-            
-        return costo - descuento
+            costo += costo * 0.15
+            #si es premium se monta un recargo
+        
+        return costo
     
     def describir(self):
-        return (f"{super().describir()} | "
-                f"Tipo: {self.__tipo_asesoria} | "
-                f"Horas: {self.__horas} | "
-                f"Nivel: {self.__nivel} | "
-                f"Total: {self.calcular_costos()}")
+        return (
+            f"Horas: {self.horas}"
+        )
+        
         
   #-------------------------------------------------------------------
   #-----------------------Clientes--------------------
@@ -662,16 +697,86 @@ class ReservaService:
             self.logger.log("ERROR", str(e))
             raise
         
+#==============================Carrito multiservicios========================================
+
+class CarritoMulti:
+    
+    def __init__(self):
+        
+        #lista de servicios
+        self.servi_multi = []
+        
+        self.logger = Logger()
+        
+    #agregar servicio
+    def agregar_servicio(self, servicios):
+        
+        #SE VALIDA UNA SOLA SALA POR RESERVA
+        if isinstance(servicios, ServicioSala):
+
+            for s in self.servi_multi:
+
+                if isinstance(s, ServicioSala):
+                    self.logger.log(
+                        "WARNING",
+                        f"Cliente {self.cliente_id} intentó agregar más de una sala"
+                    )
+                    raise ValueError("Solo se permite una sala por reserva")
+        
+        self.servi_multi.append(servicios)
+        self.logger.log(
+            "INFO",
+            f"Cliente {self.cliente_id} agregó {servicios.nombre} a su carrito"
+        )
+        
+    #======================Calcular total==================================
+    def total(self, cupon=False, cliente_premium=False):
+
+        total = 0
+
+        for s in self.servi_multi:
+
+            precio_final = s.calcular_costo_final(cupon, cliente_premium)
+
+            total += precio_final
+
+        return total
+    
+    #=====================limpiar el carrito=============================
+    
+    def limpiar(self):
+        
+        self.servi_multi.clear()
+        self.logger.log(
+            "INFO",
+            f"Cliente {self.cliente_id} ha formateado el carrito"
+        )
+        
+            
+
+
+
+
+
+#============================================================================================
+        
 #servicios en lista
 SERVICIOS = {
-    1: ServicioSala(1, "Sala de Conferencias Principal", 1, 25000),
-    2: ServicioSala(2, "Sala Reuniones Pequeña", 1, 18000),
-    3: ServicioEquipo(3, "Proyector Full HD", "Proyector", 1, 50000, 1),
-    4: ServicioEquipo(4, "Sistema de Sonido", "Audio Profesional", 1, 80000, 1),
-    5: ServicioEquipo(5, "Micrófonos inalámbricos", "Audio", 1, 20000, 1),
-    6: ServicioAsesoria(6, "Asesoría en Programación", "Python / Software", 1, 60000, "básico"),
-    7: ServicioAsesoria(7, "Asesoría en Bases de Datos", "SQL / Modelado", 1, 70000, "intermedio"),
-    8: ServicioAsesoria(8, "Consultoría Avanzada IA", "Inteligencia Artificial", 1, 120000, "avanzado")
+    1101: ServicioSala(1101, "Sala de Conferencias Principal", None, 50000),
+    1102: ServicioSala(1102, "Sala Reuniones Pequeña", None, 40000),
+    1103: ServicioSala(1103, "Sala VIP Ejecutiva", None, 100000),
+    1104: ServicioSala(1104, "Sala Empresarial Plus", None, 120000),
+    1105: ServicioSala(1105, "Sala Creativa Multimedia", None, 150000),
+    2101: ServicioEquipo(2101, "Proyector Full HD", "Proyector", None, 50000, None),
+    2102: ServicioEquipo(2102, "Sistema de Sonido Profesional", "Audio", None, 80000, None),
+    2103: ServicioEquipo(2103, "Micrófonos Inalámbricos", "Audio", None, 20000, None),
+    2104: ServicioEquipo(2104, "Pantalla LED 65 Pulgadas", "Pantalla", None, 90000, None),
+    2105: ServicioEquipo(2105, "Laptop Empresarial", "Computo", None, 75000, None),
+    3101: ServicioAsesoria(3101, "Asesoría en Programación", "Python / Software", None, 60000, "básico"),
+    3102: ServicioAsesoria(3102, "Asesoría en Bases de Datos", "SQL / Modelado", None, 70000, "intermedio"),
+    3103: ServicioAsesoria(3103, "Consultoría IA", "Inteligencia Artificial", None, 120000, "avanzado"),
+    3104: ServicioAsesoria(3104, "Asesoría en Redes", "Infraestructura", None, 65000, "intermedio"),
+    3105: ServicioAsesoria(3105, "Asesoría en Ciberseguridad", "Seguridad Informática", None, 110000, "avanzado")
 }
     
     
@@ -680,13 +785,20 @@ class App(ttk.Window):
     def __init__(self):
         super().__init__(themename="darkly")
         self.title("Software FJ")
-        self.geometry("500x400")
+        self.geometry("600x900")
         self.resizable(False,False)
         
         #servicios iniciados
         self.cl_repo = ClienteRepository()
         
+        #instancia del carritomulti
+        self.carrito = CarritoMulti()
+        
         self.show_home()#iniciamos la pantalla principal
+        
+        self.input_grupo = None 
+        
+        self.logger = Logger() #inicio del logger
         
         
     #limpiar ventana    
@@ -853,7 +965,7 @@ class App(ttk.Window):
             columns=("id", "nombre", "tipo"),
             show="headings",
             height=2,
-            selectmode="browse"  # 👈 SOLO UNA FILA
+            selectmode="browse"  
         )
         
         self.tabla_clientes = ttk.Treeview(
@@ -888,20 +1000,20 @@ class App(ttk.Window):
             )
             
         #Botones agrupados de crear clientes y reserva
-            frame_botones = ttk.Frame(self)
-            frame_botones.pack(pady=10)
-            ttk.Button(
-                frame_botones,
-                text="Seleccionar",
-                bootstyle="success",
-                command=self.seleccionar_cl,
-            ).grid(row=0, column=0, padx=10)
+        frame_botones = ttk.Frame(self)
+        frame_botones.pack(pady=10)
+        ttk.Button(
+            frame_botones,
+            text="Seleccionar",
+            bootstyle="success",
+            command=self.seleccionar_cl,
+        ).grid(row=0, column=0, padx=10)
 
-            ttk.Button(
-                frame_botones,
-                text="Atrás",
-                bootstyle="danger",
-                command=self.show_home,
+        ttk.Button(
+            frame_botones,
+            text="Atrás",
+            bootstyle="danger",
+            command=self.show_home,
             ).grid(row=0, column=1, padx=10)
             
 #========================================Pantalla de reservas y servicios==========
@@ -910,58 +1022,177 @@ class App(ttk.Window):
 
         self.clear()
 
-        # contenedor principal
-        contenedor = ttk.Frame(self)
-        contenedor.pack(pady=20)
+        # =====================================================
+        #ubicacion de los frames en pantalla
+
+        self.frame_info = ttk.Frame(self)
+        self.frame_info.pack(pady=10)
+
+        self.frame_selector = ttk.Frame(self)
+        self.frame_selector.pack(pady=5)
+
+
+        self.frame_tabla = ttk.Frame(self)
+        self.frame_tabla.pack(pady=10)
+        
+        self.frame_inputs = ttk.Frame(self)
+        self.frame_inputs.pack(pady=5)
+
+        self.frame_carrito = ttk.Frame(self)
+        self.frame_carrito.pack(pady=10, fill="x")
+
 
         ttk.Label(
-            contenedor,
+            self.frame_info,
             text="Reservas",
             font=("Arial", 22)
-        ).pack(pady=10)
+        ).pack()
 
         ttk.Label(
-            contenedor,
+            self.frame_info,
             text="Servicios",
             font=("Arial", 16)
         ).pack(pady=5)
 
-        # ================= datos del cliente =================
-
+        
+        #datos del cliente
+        
         id_cliente = datos[0]
         nombre = datos[1]
         tipo = datos[2]
 
-        frame_cliente = ttk.Frame(contenedor)
-        frame_cliente.pack(pady=10)
+        fila_cliente = ttk.Frame(self.frame_info)
+        fila_cliente.pack(pady=5)
 
         ttk.Label(
-            frame_cliente,
-            text=f"ID Cliente: {id_cliente}",
-            font=("Arial", 12)
+            fila_cliente,
+            text=f"ID: {id_cliente}"
+        ).grid(row=0, column=0, padx=5)
+
+        ttk.Label(
+            fila_cliente,
+            text=f"Nombre: {nombre}"
+        ).grid(row=0, column=1, padx=5)
+
+        ttk.Label(
+            fila_cliente,
+            text=f"Tipo: {tipo}"
+        ).grid(row=0, column=2, padx=5)
+
+        
+        # =====================Lista de sevicio================================
+
+        self.servicio_tipo_entry = self.lista_desplegable(
+            self.frame_selector,
+            "Servicios",
+            0,
+            0,
+            [
+                "Seleccione el tipo de servicios",
+                "Servicio de Salas",
+                "Servicio de Equipos",
+                "Servicio de Asesorias"
+            ]
+        )
+
+        self.servicio_tipo_entry.current(0)
+
+        self.servicio_tipo_entry.bind(
+            "<<ComboboxSelected>>",
+            self.datos_dinamicos
+        )
+
+        
+        #tabla servicios
+        # =====================================================
+
+        self.tabla = None
+        self.mostrar_placeholder()
+
+
+        #carrito servimulti
+        # =====================================================
+
+        ttk.Label(
+            self.frame_carrito,
+            text="Carrito de Servicios",
+            font=("Arial", 14)
+        ).pack(pady=5)
+
+        columnas = ("id", "nombre", "detalle", "tarifa")
+
+        self.tabla_carrito = ttk.Treeview(
+            self.frame_carrito,
+            columns=columnas,
+            show="headings",
+            height=8
+        )
+
+        for col in columnas:
+            self.tabla_carrito.heading(col, text=col.upper())
+            self.tabla_carrito.column(col, width=110, anchor="center")
+
+        self.tabla_carrito.pack(fill="x", padx=10)
+        
+         #======================checkbox dde cupon======================
+        # Variable de descuentos
+        self.var_cupon = tk.BooleanVar()
+        
+        frame_check = ttk.Frame(self)
+        frame_check.pack(pady=20)
+
+        ttk.Checkbutton(
+            frame_check,
+            text="Aplicar cupón de descuento",
+            variable=self.var_cupon,
+            bootstyle="success",
+            command=self.calcular_total,
         ).grid(row=0, column=0, padx=10)
-
+        
+        
+        #=================TOTAL==========================
+        self.total_var = tk.StringVar(value="Total: $0.00")
         ttk.Label(
-            frame_cliente,
-            text=f"Nombre: {nombre}",
-            font=("Arial", 12)
-        ).grid(row=0, column=1, padx=10)
+            self,
+            textvariable=self.total_var,
+            font=("Arial", 18),
+            bootstyle="info",
+        ).pack(pady=10)
+        
+        #SE IMPRIME EL TOTAL
+        
+        #botones de crear reserva y atrras
+        
+         #Botones agrupados de crear clientes y reserva
+        frame_botones = ttk.Frame(self)
+        frame_botones.pack(pady=10)
+        ttk.Button(
+            frame_botones,
+            text="Crear reserva",
+            bootstyle="success",
+            command=self.crear_reserva,
+        ).grid(row=0, column=0, padx=10)
+        
+        ttk.Button(
+            frame_botones,
+            text="Limpiar Carrito",
+            bootstyle="warning",
+            command=self.limpiar_carrito,
+            ).grid(row=0, column=1, padx=10)
 
-        ttk.Label(
-            frame_cliente,
-            text=f"Tipo: {tipo}",
-            font=("Arial", 12)
-        ).grid(row=0, column=2, padx=10)
+        ttk.Button(
+            frame_botones,
+            text="Cancelar",
+            bootstyle="danger",
+            command=self.dar_atras,
+            ).grid(row=0, column=2, padx=10)
+        
+       
         
         
-        
-        
-        
-        
-        
-        
-        
+#==========================================================================================       
 #====================================Acciones==============================================
+#==========================================================================================
 
 #Registrar clientes
 
@@ -1042,12 +1273,541 @@ class App(ttk.Window):
 
         datos = self.tabla_clientes.item(seleccion, "values")
         
+         # guardar cliente en el carrito
+        self.carrito.cliente_id = int(datos[0])
+        self.carrito.tipo = (datos[2])
+        
         # pasar a otra función
         self.show_servicios(datos)
         
-         
+#Combinacion dinamica select + tabla
+
+    def datos_dinamicos(self, event):
+        
+        datos = self.servicio_tipo_entry.get()
+        self.limpiar_tabla()
+        
+        # Limpiar inputs también aquí
+        if hasattr(self, "input_grupo") and self.input_grupo:
+            try:
+                if self.input_grupo.winfo_exists():
+                    self.input_grupo.destroy()
+            except:
+                pass
+            self.input_grupo = None
+            
+        #limpiar botones al regresar al estado original
+        if hasattr(self, "frame_botones") and self.frame_botones:
+            try:
+                if self.frame_botones.winfo_exists():
+                    self.frame_botones.destroy()
+            except:
+                pass
+            self.frame_botones = None
+        
+        if datos == "Seleccione el tipo de servicios":
+            self.mostrar_placeholder()
+            return
+        
+        elif datos == "Servicio de Salas":
+            
+            columnas = ("codigo", "nombre", "tarifa")
+            encabezados = ("Código", "Nombre", "tarifa")
             
             
+        elif datos == "Servicio de Equipos":
+            columnas = ("codigo", "nombre", "tipo", "tarifa")
+            encabezados = ("Código", "Nombre", "Tipo", "Tarifa")
+            #id, nombre, tipo_equipo, dias, tarifa_dia, cantidad=1
+            
+        elif datos == "Servicio de Asesorias":
+            columnas = ("codigo", "nombre", "tarifa", "nivel")
+            encabezados = ("Código", "Nombre", "Tarifa", "Nivel")
+            
+            #self, id, nombre, tipo_asesoria, horas, tarifa_horas, nivel="básico"
+        
+        else:
+            self.mostrar_placeholder()
+            return
+              
+        self.construir_tabla(columnas, encabezados)
+        self.datos_tabla(datos)
+        self.input_dinamicos(datos)
+        
+        
+            
+  # Contruccion y destruccion de tabla
+            
+    def construir_tabla(self, columnas, encabezados):
+
+        # destruir tabla anterior
+        if self.tabla:
+            self.tabla.destroy()
+
+        self.tabla = ttk.Treeview(
+            self.frame_tabla,
+            columns=columnas,
+            show="headings",
+            height=6,
+            selectmode="browse"
+        )
+
+        for col, titulo in zip(columnas, encabezados):
+
+            # encabezado
+            self.tabla.heading(col, text=titulo, anchor="center")
+
+            # configuración dinámica de columnas
+            if col == "id" or col == "codigo":
+                self.tabla.column(
+                    col,
+                    width=80,
+                    anchor="center"
+                )
+
+            elif col == "nombre":
+                self.tabla.column(
+                    col,
+                    width=180,
+                    anchor="w"
+                )
+
+            elif col == "tipo":
+                self.tabla.column(
+                    col,
+                    width=80,
+                    anchor="center"
+                )
+
+            elif col == "nivel":
+                self.tabla.column(
+                    col,
+                    width=120,
+                    anchor="center"
+                )
+
+            elif col == "tarifa":
+                self.tabla.column(
+                    col,
+                    width=80,
+                    anchor="center"
+                )
+
+            elif col == "cantidad":
+                self.tabla.column(
+                    col,
+                    width=100,
+                    anchor="center"
+                )
+
+            elif col == "dias":
+                self.tabla.column(
+                    col,
+                    width=100,
+                    anchor="center"
+                )
+
+            elif col == "horas":
+                self.tabla.column(
+                    col,
+                    width=100,
+                    anchor="center"
+                )
+
+            elif col == "area":
+                self.tabla.column(
+                    col,
+                    width=180,
+                    anchor="center"
+                )
+
+            else:
+                self.tabla.column(
+                    col,
+                    width=150,
+                    anchor="center"
+                )
+
+        self.tabla.pack(pady=10)     
+        
+        
+        # ================= LIMPIAR =================
+    def limpiar_tabla(self):
+
+        # borrar tabla si existe
+        if self.tabla:
+            self.tabla.destroy()
+            self.tabla = None
+            
+         # borrar placeholder e
+        for widget in self.frame_tabla.winfo_children():
+            widget.destroy()
+            
+    def mostrar_placeholder(self):
+
+        self.limpiar_tabla()
+
+        columnas = ("mensaje",)
+        encabezados = ("Estado",)
+
+        self.tabla = ttk.Treeview(
+            self.frame_tabla,
+            columns=columnas,
+            show="headings",
+            height=3
+        )
+
+        self.tabla.heading("mensaje", text="Estado")
+        self.tabla.column("mensaje", anchor="center", width=300)
+
+        self.tabla.pack(pady=10)
+
+        self.tabla.insert(
+            "",
+            "end",
+            values=("No hay datos. Seleccione un servicio",)
+        )
+        
+    #================Constuir inputs=========================
+    def input_dinamicos(self, datos):
+
+        
+        #limpiar contenido
+        # ==================================================
+        for widget in self.frame_inputs.winfo_children():
+            widget.destroy()
+
+        if datos == "Seleccione el tipo de servicios":
+            return
+
+    
+        #contendor
+        # ==================================================
+        self.input_grupo = ttk.Frame(self.frame_inputs)
+        self.input_grupo.pack(pady=5)
+
+        # ================= sala =================
+        if datos == "Servicio de Salas":
+
+            self.hora_sa_entry = self.create_input(
+                self.input_grupo,
+                "Horas a alquilar:",
+                0,
+                0
+            )
+
+        # ================= equipos =================
+        elif datos == "Servicio de Equipos":
+
+            self.dias_entry = self.create_input(
+                self.input_grupo,
+                "Días a alquilar",
+                0,
+                0
+            )
+
+            self.cantidad_entry = self.create_input(
+                self.input_grupo,
+                "Cantidad de equipos:",
+                0,
+                1
+            )
+
+        # ================= asesoria =================
+        elif datos == "Servicio de Asesorias":
+
+            self.hora_servicio_entry = self.create_input(
+                self.input_grupo,
+                "Horas",
+                0,
+                0
+            )
+
+        #botones dinamicos
+        # ==================================================
+        self.frame_botones = ttk.Frame(self.frame_inputs)
+        self.frame_botones.pack(pady=5)
+
+        ttk.Button(
+            self.frame_botones,
+            text="Agregar",
+            bootstyle="warning",
+            command=self.agregar_al_carritoMulti
+        ).grid(row=0, column=0, padx=10)
+        
+            
+#=================================Llenar tabla=========================
+    def datos_tabla(self, datos):
+         # Limpiar datos existentes
+        for item in self.tabla.get_children():
+            self.tabla.delete(item)
+            
+        if datos == "Servicio de Salas":
+            
+            servi_salas = [
+                s for s in SERVICIOS.values()
+                if isinstance(s, ServicioSala)
+            ]
+            
+            for servicio in servi_salas:
+                self.tabla.insert(
+                    "",
+                    "end",
+                    values=(
+                        servicio.id,
+                        servicio.nombre,
+                        servicio.tarifa_por_hora
+                    )
+                )
+                
+        elif datos == "Servicio de Equipos":
+            
+            servi_salas = [
+                s for s in SERVICIOS.values()
+                if isinstance(s, ServicioEquipo)
+            ]
+            
+            for servicio in servi_salas:
+                self.tabla.insert(
+                    "",
+                    "end",
+                    values=(
+                        servicio.id,
+                        servicio.nombre,
+                        servicio.tipo_equipo,
+                        servicio.tarifa_dia
+                    )
+                )
+                
+        elif datos == "Servicio de Asesorias":
+            
+            servi_salas = [
+                s for s in SERVICIOS.values()
+                if isinstance(s, ServicioAsesoria)
+            ]
+            
+            for servicio in servi_salas:
+                self.tabla.insert(
+                    "",
+                    "end",
+                    values=(
+                        servicio.id,
+                        servicio.nombre,
+                        servicio.tarifa_horas,
+                        servicio.nivel
+                    )
+                )
+            
+ 
+#============================= Agregar servicio al carrito multi==========================
+
+    def agregar_al_carritoMulti(self):
+
+        try:
+
+            seleccion = self.tabla.selection()
+
+            if not seleccion:
+                messagebox.showerror("Error", "¡Seleccione un servicio de la lista!")
+                return
+
+            item = self.tabla.item(seleccion[0])
+            id_servicio = int(item["values"][0])
+
+            servicio_base = SERVICIOS.get(id_servicio)
+
+            if not servicio_base:
+                messagebox.showerror("Error", "Servicio no encontrado")
+                return
+
+            tipo = self.servicio_tipo_entry.get()
+
+            # ================= SERVICIO SALA =================
+            if tipo == "Servicio de Salas":
+
+                if not hasattr(self, "hora_sa_entry"):
+                    messagebox.showerror("Error", "Debe ingresar horas")
+                    return
+
+                hora = self.hora_sa_entry.get().strip()
+
+                if not hora:
+                    messagebox.showerror("Error", "El campo hora es obligatorio.")
+                    return
+
+                try:
+                    hora = int(hora)
+                except ValueError:
+                    messagebox.showerror("Error", "Las horas deben ser numéricas.")
+                    return
+
+                servicio_nuevo = ServicioSala(
+                    servicio_base.id,
+                    servicio_base.nombre,
+                    hora,
+                    servicio_base.tarifa_por_hora
+                )
+
+                self.hora_sa_entry.delete(0, tk.END)
+
+            # ================= SERVICIO EQUIPOS =================
+            elif tipo == "Servicio de Equipos":
+
+                if not hasattr(self, "dias_entry") or not hasattr(self, "cantidad_entry"):
+                    messagebox.showerror("Error", "Debe ingresar días y cantidad")
+                    return
+
+                dias = self.dias_entry.get().strip()
+                cantidad = self.cantidad_entry.get().strip()
+
+                if not dias:
+                    messagebox.showerror("Error", "El campo días es obligatorio.")
+                    return
+
+                if not cantidad:
+                    messagebox.showerror("Error", "El campo cantidad es obligatorio.")
+                    return
+
+                try:
+                    dias = int(dias)
+                    cantidad = int(cantidad)
+                except ValueError:
+                    messagebox.showerror("Error", "Días y cantidad deben ser numéricos.")
+                    return
+
+                servicio_nuevo = ServicioEquipo(
+                    servicio_base.id,
+                    servicio_base.nombre,
+                    servicio_base.tipo_equipo,
+                    dias,
+                    servicio_base.tarifa_dia,
+                    cantidad   
+                )
+
+                self.dias_entry.delete(0, tk.END)
+                self.cantidad_entry.delete(0, tk.END)
+
+            # ================= SERVICIO ASESORÍA =================
+            elif tipo == "Servicio de Asesorias":
+
+                if not hasattr(self, "hora_servicio_entry"):
+                    messagebox.showerror("Error", "Debe ingresar horas")
+                    return
+
+                horas = self.hora_servicio_entry.get().strip()
+
+                if not horas:
+                    messagebox.showerror("Error", "El campo hora es obligatorio.")
+                    return
+
+                try:
+                    horas = int(horas)
+                except ValueError:
+                    messagebox.showerror("Error", "Las horas deben ser numéricas.")
+                    return
+
+                servicio_nuevo = ServicioAsesoria(
+                    servicio_base.id,
+                    servicio_base.nombre,
+                    servicio_base.tipo_asesoria,
+                    horas,
+                    servicio_base.tarifa_horas
+                )
+
+                self.hora_servicio_entry.delete(0, tk.END)
+                
+
+            else:
+                messagebox.showerror("Error", "Seleccione un tipo de servicio válido")
+                return
+
+            # ================= AGREGAR AL CARRITO =================
+            self.carrito.agregar_servicio(servicio_nuevo)
+            self.actualizar_carritoMulti()
+            self.calcular_total()
+
+            messagebox.showinfo(
+                "Carrito",
+                f"{servicio_nuevo.nombre} añadido al carrito"
+            )
+
+            self.tabla.selection_remove(self.tabla.selection())
+            self.tabla.focus("")
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+            
+    #=======================actualizar info carrito==================
+        
+    def actualizar_carritoMulti(self):
+
+        #limpiar tabla
+        for fila in self.tabla_carrito.get_children():
+            self.tabla_carrito.delete(fila)
+
+        #recorrer carrito
+        for s in self.carrito.servi_multi:
+
+            es_premium = (self.carrito.tipo == "premium")
+
+            self.tabla_carrito.insert(
+                "",
+                tk.END,
+                values=(
+                    s.id,
+                    s.nombre,
+                    s.describir(),
+                    f"{s.calcular_costo_final(cliente_premium=es_premium):,.0f}".replace(",", ".")
+                )
+            )
+            
+#============================calcular total e imprimir====================
+
+    def calcular_total(self):
+        
+        es_premium = (self.carrito.tipo == "premium")
+        
+        total = self.carrito.total(
+           cliente_premium = es_premium,
+           cupon = self.var_cupon.get(),
+        )
+        self.total_var.set(f"Total: ${total:,.2f}")
+        
+#=============limpieza============================
+    def limpiar_carrito(self):
+        
+        self.carrito.limpiar()
+        self.actualizar_carritoMulti()
+        self.calcular_total()
+    
+#===============funcion para dar atras============
+    def dar_atras(self):
+        
+        self.limpiar_carrito()
+        self.show_cliente_reserva()
+        self.logger.log(
+            "INFO",
+            f"Cliente {self.carrito.cliente_id} ha cancelado la operación de reserva"
+        )
+        
+#==============================================================================================
+#===========================================Reservas creacion==================================
+#==============================================================================================
+
+    def crear_reserva(self):
+        
+        messagebox.showinfo("Success", "Reserva creada")
+            
+    
+    
+           
+        
+            
+        
+                
+
+       
+                        
 # ================================= EJECUCION PROGRAMA ==========================================
 if __name__ == "__main__":
     app = App()

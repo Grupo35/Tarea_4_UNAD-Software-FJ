@@ -36,3 +36,110 @@
 [2026-04-27 21:44:48] INFO: Cliente guardado ID 1193235860
 [2026-04-27 22:26:47] INFO: Cliente guardado ID 1193235456
 [2026-04-27 22:27:27] INFO: Cliente guardado ID 100548568745
+[2026-04-28 22:41:28] INFO: Cliente guardado ID 1105
+[2026-04-29 15:02:44] INFO: Servicio agregado en el carrito <__main__.ServicioSala object at 0x00000267884C5FD0>
+[2026-04-29 15:04:12] INFO: Servicio agregado en el carrito [<__main__.ServicioSala object at 0x000001CA4ACD5FD0>]
+[2026-04-29 15:08:19] INFO: Servicio agregado: Sala VIP Ejecutiva
+[2026-04-29 15:14:27] INFO: Cliente 1105 agregó Sala Empresarial Plus
+[2026-04-29 15:15:10] INFO: Cliente 1105 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 15:18:40] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 15:20:43] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 15:26:23] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 15:27:24] INFO: Cliente 1105 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 15:28:37] INFO: Cliente 1105 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 15:30:40] INFO: Cliente 1105 agregó Sala Reuniones Pequeña a su carrito
+[2026-04-29 15:31:25] INFO: Cliente 1105 agregó Sala Reuniones Pequeña a su carrito
+[2026-04-29 15:35:58] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:36:16] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:46:08] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:46:41] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:49:56] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:50:26] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:53:23] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:53:56] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 15:56:05] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 16:01:13] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 16:01:35] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 16:01:46] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 17:22:58] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:27:17] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:37:58] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:38:55] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:41:20] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 17:42:46] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 17:43:15] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:43:23] INFO: Cliente 100548568745 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 17:43:51] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:46:27] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:50:25] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:50:40] INFO: Cliente 1105 agregó Sala Reuniones Pequeña a su carrito
+[2026-04-29 17:51:02] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:57:07] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 17:58:31] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:01:51] INFO: Cliente 100548568745 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 18:04:44] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:05:19] INFO: Cliente 100548568745 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 18:11:35] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:11:51] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 18:12:16] INFO: Cliente 100548568745 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 18:15:58] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:16:13] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:16:17] INFO: Cliente 100548568745 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 18:16:32] INFO: Cliente 100548568745 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 18:24:05] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 18:26:01] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:26:06] INFO: Cliente 100548568745 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 18:26:53] INFO: Cliente 1193235456 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 18:37:19] INFO: Cliente 1105 agregó Sala Creativa Multimedia a su carrito
+[2026-04-29 19:04:33] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:19:32] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 19:20:04] INFO: Cliente 1105 agregó Micrófonos Inalámbricos a su carrito
+[2026-04-29 19:20:22] INFO: Cliente 1105 agregó Laptop Empresarial a su carrito
+[2026-04-29 19:20:47] INFO: Cliente 1105 agregó Asesoría en Programación a su carrito
+[2026-04-29 19:21:26] INFO: Cliente 1105 agregó Sistema de Sonido Profesional a su carrito
+[2026-04-29 19:24:39] INFO: Cliente 1105 agregó Proyector Full HD a su carrito
+[2026-04-29 19:28:18] INFO: Cliente 1105 agregó Proyector Full HD a su carrito
+[2026-04-29 19:31:14] INFO: Cliente 1105 agregó Proyector Full HD a su carrito
+[2026-04-29 19:33:53] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:38:46] INFO: Cliente 1105 agregó Proyector Full HD a su carrito
+[2026-04-29 19:39:48] INFO: Cliente 1105 agregó Asesoría en Programación a su carrito
+[2026-04-29 19:41:08] INFO: Cliente 1105 agregó Asesoría en Ciberseguridad a su carrito
+[2026-04-29 19:42:51] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:43:03] INFO: Cliente 100548568745 agregó Sistema de Sonido Profesional a su carrito
+[2026-04-29 19:43:39] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:44:12] INFO: Cliente 1105 agregó Consultoría IA a su carrito
+[2026-04-29 19:45:34] INFO: Cliente 1105 agregó Asesoría en Redes a su carrito
+[2026-04-29 19:46:50] INFO: Cliente 100548568745 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:46:59] INFO: Cliente 100548568745 agregó Proyector Full HD a su carrito
+[2026-04-29 19:47:06] INFO: Cliente 100548568745 agregó Pantalla LED 65 Pulgadas a su carrito
+[2026-04-29 19:47:37] INFO: Cliente 100548568745 agregó Asesoría en Ciberseguridad a su carrito
+[2026-04-29 19:50:47] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 19:51:08] INFO: Cliente 1105 agregó Proyector Full HD a su carrito
+[2026-04-29 19:51:31] INFO: Cliente 1105 agregó Consultoría IA a su carrito
+[2026-04-29 19:57:18] INFO: Cliente 1105 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 19:57:34] INFO: Cliente 1105 ha formateado el carrito
+[2026-04-29 19:57:53] INFO: Cliente 1105 agregó Sala VIP Ejecutiva a su carrito
+[2026-04-29 19:58:02] INFO: Cliente 1105 ha formateado el carrito
+[2026-04-29 19:59:01] INFO: Cliente 1105 agregó Sala Reuniones Pequeña a su carrito
+[2026-04-29 19:59:09] INFO: Cliente 1105 agregó Pantalla LED 65 Pulgadas a su carrito
+[2026-04-29 19:59:14] INFO: Cliente 1105 ha formateado el carrito
+[2026-04-29 20:02:13] INFO: Cliente 1105 agregó Sistema de Sonido Profesional a su carrito
+[2026-04-29 20:02:18] INFO: Cliente 1105 ha formateado el carrito
+[2026-04-29 20:02:18] INFO: Cliente 1105 ha cancelado la operación de reserva
+[2026-04-29 20:06:08] INFO: Cliente guardado ID 92054698
+[2026-04-29 20:06:27] INFO: Cliente 92054698 agregó Sala Empresarial Plus a su carrito
+[2026-04-29 20:06:49] INFO: Cliente 92054698 agregó Laptop Empresarial a su carrito
+[2026-04-29 20:06:56] INFO: Cliente 92054698 agregó Asesoría en Redes a su carrito
+[2026-04-29 20:13:41] INFO: Cliente 92054698 agregó Sala de Conferencias Principal a su carrito
+[2026-04-29 20:13:46] WARNING: Cliente 92054698 intentó agregar más de una sala
+[2026-04-29 20:13:52] WARNING: Cliente 92054698 intentó agregar más de una sala
+[2026-04-29 20:14:06] INFO: Cliente 92054698 agregó Proyector Full HD a su carrito
+[2026-04-29 20:14:10] INFO: Cliente 92054698 agregó Pantalla LED 65 Pulgadas a su carrito
+[2026-04-29 20:14:26] INFO: Cliente 92054698 agregó Laptop Empresarial a su carrito
+[2026-04-29 20:14:30] INFO: Cliente 92054698 agregó Laptop Empresarial a su carrito
+[2026-04-29 20:14:42] INFO: Cliente 92054698 agregó Consultoría IA a su carrito
+[2026-04-29 20:14:46] INFO: Cliente 92054698 agregó Asesoría en Ciberseguridad a su carrito
+[2026-04-29 20:14:49] INFO: Cliente 92054698 agregó Consultoría IA a su carrito
+[2026-04-29 20:14:56] INFO: Cliente 92054698 agregó Asesoría en Programación a su carrito
+[2026-04-29 20:15:07] INFO: Cliente 92054698 ha formateado el carrito
+[2026-04-29 20:15:34] INFO: Cliente 92054698 ha formateado el carrito
