@@ -1,0 +1,88 @@
+[
+    {
+        "id": "RES-0001",
+        "cliente_id": 92045689,
+        "servicios": [
+            {
+                "_Servicio__id": 1103,
+                "_Servicio__nombre": "Sala VIP Ejecutiva",
+                "_ServicioSala__horas": 1,
+                "_ServicioSala__tarifa_por_hora": 100000
+            },
+            {
+                "_Servicio__id": 2101,
+                "_Servicio__nombre": "Proyector Full HD",
+                "_ServicioEquipo__tipo_equipo": "Proyector",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 50000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2103,
+                "_Servicio__nombre": "Micr\u00f3fonos Inal\u00e1mbricos",
+                "_ServicioEquipo__tipo_equipo": "Audio",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 20000,
+                "_ServicioEquipo__cantidad": 2
+            },
+            {
+                "_Servicio__id": 2105,
+                "_Servicio__nombre": "Laptop Empresarial",
+                "_ServicioEquipo__tipo_equipo": "Computo",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 75000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 3103,
+                "_Servicio__nombre": "Consultor\u00eda IA",
+                "_ServicioAsesoria__tipo_asesoria": "Inteligencia Artificial",
+                "_ServicioAsesoria__horas": 1,
+                "_ServicioAsesoria__tarifa_horas": 120000,
+                "_ServicioAsesoria__nivel": "b\u00e1sico"
+            }
+        ],
+        "fecha": "2026-05-20",
+        "estado": "pendiente",
+        "total": 385000
+    },
+    {
+        "id": "RES-0002",
+        "cliente_id": 11017854261,
+        "servicios": [
+            {
+                "_Servicio__id": 1105,
+                "_Servicio__nombre": "Sala Creativa Multimedia",
+                "_ServicioSala__horas": 1,
+                "_ServicioSala__tarifa_por_hora": 150000
+            },
+            {
+                "_Servicio__id": 2101,
+                "_Servicio__nombre": "Proyector Full HD",
+                "_ServicioEquipo__tipo_equipo": "Proyector",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 50000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2104,
+                "_Servicio__nombre": "Pantalla LED 65 Pulgadas",
+                "_ServicioEquipo__tipo_equipo": "Pantalla",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 90000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 3105,
+                "_Servicio__nombre": "Asesor\u00eda en Ciberseguridad",
+                "_ServicioAsesoria__tipo_asesoria": "Seguridad Inform\u00e1tica",
+                "_ServicioAsesoria__horas": 1,
+                "_ServicioAsesoria__tarifa_horas": 110000,
+                "_ServicioAsesoria__nivel": "b\u00e1sico"
+            }
+        ],
+        "fecha": "2026-05-01",
+        "estado": "confirmado",
+        "total": 452500.0
+    }
+]

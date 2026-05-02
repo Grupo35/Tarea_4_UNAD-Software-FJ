@@ -465,25 +465,23 @@ class ClienteRepository:
   #-------------------------------------------------------------------   
   
 class Reserva:
-    def __init__(self, id, cliente, servicio, fecha):
+    def __init__(self, id, cliente, servicio, fecha, total):
         self.id = id
         self.cliente = cliente
         self.servicio = servicio
         self.fecha = fecha
         self.estado = "pendiente"
+        self.total = total
 
     # ---------------- ID ----------------
     @property
     def id(self):
         return self.__id
-
+    
     @id.setter
-    def id(self, valor):
-        if not isinstance(valor, int):
-            raise ValueError("ID inválido: debe ser entero")
-        if valor <= 0:
-            raise ValueError("ID inválido: debe ser mayor a 0")
-        self.__id = valor
+    def id(self, value):
+        self.__id = value
+
 
     # ---------------- CLIENTE ----------------
     @property
@@ -549,22 +547,16 @@ class Reserva:
     def cancelar(self):
         self.estado = "cancelado"
 
-    def obtener_total(self, cliente_premium=False):
-        costo = self.servicio.calcular_costos()
-
-        if cliente_premium:
-            costo = self.servicio.calcular_descuento(cliente_premium=True)
-
-        return costo
-
     def describir(self):
+        servicios_txt = ", ".join(self.servicio) if isinstance(self.servicio, list) else self.servicio
+
         return (
-            f"Reserva ID: {self.__id} | "
-            f"Cliente: {self.cliente.nombre} | "
-            f"Servicio: {self.servicio.nombre} | "
+            f"Reserva ID: {self.id} | "
+            f"Cliente ID: {self.cliente} | "
+            f"Servicios: {servicios_txt} | "
             f"Fecha: {self.fecha} | "
             f"Estado: {self.estado} | "
-            f"Total: {self.obtener_total(self.cliente.es_premium())}"
+            f"Total: {self.total}"
         )
         
 # ===================== RESERVA SERVICE =====================
@@ -576,6 +568,7 @@ class ReservaService:
         self.cliente_repo = cliente_repo
         self.logger = logger
         self.reservas = []
+        self.contador_reservas = 0
 
         os.makedirs("data", exist_ok=True)
 
@@ -583,81 +576,80 @@ class ReservaService:
             with open(self.FILE_PATH, "w") as f:
                 json.dump([], f)
 
-    # ---------------- LISTAR RESERVAS ----------------
+        self.cargar_contador()
+
+    # ---------------- cargar contador ----------------
+    def cargar_contador(self):
+        try:
+            with open(self.FILE_PATH, "r") as f:
+                data = json.load(f)
+
+            if data:
+                ultimo_id = data[-1]["id"]
+                numero = int(ultimo_id.split("-")[1])
+                self.contador_reservas = numero
+            else:
+                self.contador_reservas = 0
+
+        except Exception:
+            self.contador_reservas = 0
+
+    # ---------------- lista de reservas ----------------
     def lista_reservas(self):
         with open(self.FILE_PATH, "r") as f:
             return json.load(f)
 
-    # ---------------- VALIDAR DUPLICADOS ----------------
-    def es_reserva_duplicada(self, id_cliente, servicio_nombre, fecha):
+    # ----------------validar duplicads ----------------
+    def es_reserva_duplicada(self, id_cliente):
 
         reservas_json = self.lista_reservas()
 
         for r in reservas_json:
-            if (
-                r["cliente_id"] == id_cliente and
-                r["servicio"] == servicio_nombre and
-                r["fecha"] == str(fecha)
-            ):
+            if r["cliente_id"] == id_cliente:
                 return True
 
         for r in self.reservas:
-            if (
-                r.cliente.id == id_cliente and
-                r.servicio.nombre == servicio_nombre and
-                str(r.fecha) == str(fecha)
-            ):
+            if r.cliente == id_cliente:
                 return True
 
         return False
 
-    # ---------------- CREAR RESERVA ----------------
-    def crear_reservas(self, id_reserva, id_cliente, servicio, fecha):
+    # ----------------crear reserva ----------------
+    def crear_reservas(self, id_cliente, servicios, fecha, total):
 
         try:
-            # ---------------- VALIDAR SERVICIO ----------------
-            servicio_obj = SERVICIOS.get(servicio)
 
-            if not servicio_obj:
-                self.logger.log("ERROR", f"Servicio no existe ID {servicio}")
-                raise ValueError("El servicio no existe")
+            #validar servicios ----------------
+            if not servicios or not isinstance(servicios, list):
+                self.logger.log("ERROR", "Servicios inválidos")
+                raise ValueError("Debe haber al menos un servicio")
 
-            # ---------------- VALIDAR DUPLICADO ----------------
-            if self.es_reserva_duplicada(id_cliente, servicio_obj.nombre, fecha):
+            #validar cliente ----------------
+            if not isinstance(id_cliente, int):
+                self.logger.log("ERROR", f"Cliente inválido {id_cliente}")
+                raise ValueError("Cliente no válido")
+
+            #validar duplicado----------------
+            if self.cliente_tiene_reserva_activa(id_cliente, fecha):
+
                 self.logger.log(
                     "ERROR",
-                    f"Reserva duplicada cliente:{id_cliente} servicio:{servicio_obj.nombre} fecha:{fecha}"
+                    f"Cliente {id_cliente} intentó crear una reserva ya existente para la fecha {fecha}"
                 )
-                raise ValueError("Ya existe una reserva con estos datos")
 
-            # ---------------- BUSCAR CLIENTE ----------------
-            clientes = self.cliente_repo.get_clientes_registrados()
+                raise ValueError("Ya existe una reserva activa en esa fecha")
 
-            cliente_data = next(
-                (c for c in clientes if c["id"] == id_cliente),
-                None
-            )
+            #generar id ----------------
+            self.contador_reservas += 1
+            id_reserva = f"RES-{self.contador_reservas:04d}"
 
-            if not cliente_data:
-                self.logger.log("ERROR", f"Cliente no registrado {id_cliente}")
-                raise ValueError("Cliente no registrado")
+            # crear reserva ----------------
+            reserva = Reserva(id_reserva, id_cliente, servicios, fecha, total)
 
-            # ---------------- CREAR CLIENTE ----------------
-            cliente = Cliente(
-                cliente_data["id"],
-                cliente_data["nombre"],
-                cliente_data["telefono"],
-                cliente_data["email"],
-                cliente_data["tipo"]
-            )
-
-            # ---------------- crear reserva ----------------
-            reserva = Reserva(id_reserva, cliente, servicio_obj, fecha)
-
-            # ---------------- guardado en memoria ----------------
+            #guardar en memoria----------------
             self.reservas.append(reserva)
 
-            # ---------------- guardar en json ----------------
+            #guardar en json----------------
             self.guardar_json(reserva)
 
             self.logger.log("INFO", f"Reserva creada ID {id_reserva}")
@@ -668,7 +660,7 @@ class ReservaService:
             self.logger.log("ERROR", str(e))
             raise
 
-    # ---------------- Guardar ----------------
+    #guardar----------------
     def guardar_json(self, reserva):
 
         with open(self.FILE_PATH, "r") as f:
@@ -676,27 +668,78 @@ class ReservaService:
 
         data.append({
             "id": reserva.id,
-            "cliente_id": reserva.cliente.id,
-            "servicio": reserva.servicio.nombre,
+            "cliente_id": reserva.cliente,
+            "servicios": [s.__dict__ for s in reserva.servicio],  #lista de servicios
             "fecha": str(reserva.fecha),
             "estado": reserva.estado,
-            "total": reserva.obtener_total(reserva.cliente.es_premium())
+            "total": reserva.total
         })
 
         with open(self.FILE_PATH, "w") as f:
             json.dump(data, f, indent=4)
 
-    # ---------------- CAMBIAR ESTADO ----------------
-    def cambiar_estado(self, reserva, estado):
+    #cambio de estado ----------------
+    def cambiar_estado_reserva(self, id_reserva, estado):
 
         try:
-            reserva.estado = estado
-            self.logger.log("INFO", f"Estado cambiado a {estado}")
+            with open(self.FILE_PATH, "r") as f:
+                data = json.load(f)
+
+            for reserva in data:
+                if reserva["id"] == id_reserva:
+
+                    if reserva["estado"] == estado:
+                        self.logger.log(
+                            "WARNING",
+                            "Intento de asignar el mismo estado"
+                        )
+                        return
+
+                    reserva["estado"] = estado
+                    break
+            else:
+                self.logger.log("ERROR", "Reserva no encontrada")
+                return
+
+            with open(self.FILE_PATH, "w") as f:
+                json.dump(data, f, indent=4)
+
+            self.logger.log("INFO", f"Estado de la reserva: {id_reserva} ha sido cambiado a {estado}")
 
         except Exception as e:
             self.logger.log("ERROR", str(e))
-            raise
         
+    #------------------obtener reservas registradas-----------------------
+    
+    def obtener_reservas(self):
+
+        try:
+            with open(self.FILE_PATH, "r") as f:
+                data = json.load(f)
+
+            return data   
+
+        except Exception as e:
+            self.logger.log("ERROR", f"Error leyendo reservas: {e}")
+            return []
+        
+    #----------------------------Validar reservas duplicadas-----------------------
+    
+    def cliente_tiene_reserva_activa(self, id_cliente, fecha):
+
+        reservas = self.lista_reservas()
+
+        for r in reservas:
+
+            if (
+                r["cliente_id"] == id_cliente and
+                r["fecha"] == str(fecha) and
+                r["estado"] in ["pendiente", "confirmada"]
+            ):
+                return True
+
+        return False
+            
 #==============================Carrito multiservicios========================================
 
 class CarritoMulti:
@@ -707,6 +750,8 @@ class CarritoMulti:
         self.servi_multi = []
         
         self.logger = Logger()
+        
+        #self.cliente_id = None
         
     #agregar servicio
     def agregar_servicio(self, servicios):
@@ -785,7 +830,7 @@ class App(ttk.Window):
     def __init__(self):
         super().__init__(themename="darkly")
         self.title("Software FJ")
-        self.geometry("600x900")
+        self.geometry("850x900")
         self.resizable(False,False)
         
         #servicios iniciados
@@ -794,11 +839,18 @@ class App(ttk.Window):
         #instancia del carritomulti
         self.carrito = CarritoMulti()
         
+        self.logger = Logger() #inicio del logger
+        
+        self.reserva = ReservaService(self.cl_repo, self.logger)
+        
+        
         self.show_home()#iniciamos la pantalla principal
         
         self.input_grupo = None 
         
-        self.logger = Logger() #inicio del logger
+      
+        
+        
         
         
     #limpiar ventana    
@@ -864,7 +916,75 @@ class App(ttk.Window):
         
         ttk.Label(self, text = "Bienvenido", font = ("Arial", 24)).pack(pady = 25)
         
+        #==========================Tabla para mostrar reservas=================================
+        self.frame_info = ttk.Frame(self)
+        self.frame_info.pack(pady=10)
+        self.frame_selector = ttk.Frame(self)
+        self.frame_selector.pack(pady=5)
+        
+        ttk.Label(
+            self.frame_info,
+            text="Reservas",
+            font=("Arial", 16)
+        ).pack(pady=5)
+        
+        self.estado_reserva_entry = self.lista_desplegable(
+            self.frame_selector,
+            "",
+            0,
+            0,
+            [   
+                "Seleccione un estado",
+                "Pendientes",
+                "Confirmadas",
+                "Canceladas",
+            ]
+        )
+        
+        self.estado_reserva_entry.current(0)
+
+        self.estado_reserva_entry.bind(
+            "<<ComboboxSelected>>",
+            self.reservas_dinamicas
+        )
+        
+        self.tabla_reservas = ttk.Treeview(
+            self,
+            columns=("codigo", "cliente", "fecha", "estado"),
+            show="headings",
+            height=10,
+            selectmode="browse",
+        )
+
+        self.tabla_reservas.heading("codigo", text="Código")
+        self.tabla_reservas.heading("cliente", text="Cliente")
+        self.tabla_reservas.heading("fecha", text="Fecha")
+        self.tabla_reservas.heading("estado", text="Estado")
+
+        # ================= columnas =================
+        self.tabla_reservas.column("codigo", width=80, anchor="center")
+        self.tabla_reservas.column("cliente", width=150)
+        self.tabla_reservas.column("fecha", width=80, anchor="center")
+        self.tabla_reservas.column("estado", width=80, anchor="center")
+
+        self.tabla_reservas.pack(pady=15)
+        
+        self.cargar_reservas()
+        
+        #===========================================================================================
+        
         #Botones agrupados de crear clientes y reserva
+        
+         #Botone de ver reservas 
+        frame_botones = ttk.Frame(self)
+        frame_botones.pack(pady=10)
+        ttk.Button(
+            frame_botones,
+            text="Ver más info",
+            bootstyle="warning",
+            command=self.info_reserva,
+        ).grid(row=0, column=0, padx=10)
+        
         frame_botones = ttk.Frame(self)
         frame_botones.pack(pady=10)
         ttk.Button(
@@ -881,15 +1001,6 @@ class App(ttk.Window):
             command=self.show_cliente_reserva,
         ).grid(row=0, column=1, padx=10)
         
-        #Botone de ver reservas 
-        frame_botones = ttk.Frame(self)
-        frame_botones.pack(pady=10)
-        ttk.Button(
-            frame_botones,
-            text="Reservas Creadas",
-            bootstyle="warning",
-            command=self.clear,
-        ).grid(row=0, column=0, padx=10)
         
 #Pantalla de creacion de usuarios###########################################################
     def show_clientes(self):
@@ -1163,7 +1274,7 @@ class App(ttk.Window):
         
         #botones de crear reserva y atrras
         
-         #Botones agrupados de crear clientes y reserva
+         
         frame_botones = ttk.Frame(self)
         frame_botones.pack(pady=10)
         ttk.Button(
@@ -1186,6 +1297,240 @@ class App(ttk.Window):
             bootstyle="danger",
             command=self.dar_atras,
             ).grid(row=0, column=2, padx=10)
+        
+    #====================================Info reserva y cambio de estado==================================
+    def show_info_reserva(self, datos):
+
+        self.clear()
+        
+        clientes = self.cl_repo.get_clientes_registrados()
+
+        self.frame_info = ttk.Frame(self)
+        self.frame_info.pack(pady=10)
+        
+
+        ttk.Label(
+            self.frame_info,
+            text="Información de Reserva",
+            font=("Arial", 22)
+        ).pack(pady=10)
+
+        id_reserva = datos[0]
+
+        reservas = self.reserva.lista_reservas()
+
+        reserva_dict = next(
+            (r for r in reservas if r["id"] == id_reserva),
+            None
+        )
+
+        #validacion de si existe o no la reserva
+        if not reserva_dict:
+            ttk.Label(
+                self.frame_info,
+                text="Reserva no encontrada",
+                font=("Arial", 14)
+            ).pack(pady=10)
+            return
+
+        #buscar info cliente para mostrar
+        cliente_obj = next(
+            (c for c in clientes if c.id == reserva_dict["cliente_id"]),
+            None
+        )
+
+        if cliente_obj:
+            nombre_cliente = cliente_obj.nombre
+            telefonoCL = cliente_obj.telefono
+            correoCL = cliente_obj.email
+            tipoCL = cliente_obj.tipo
+        else:
+            nombre_cliente = "Desconocido"
+            telefonoCL = "Desconocido"
+            correoCL = "Desconocido"
+            tipoCL = "Desconocido"
+
+        # ================= INFO RESERVA =================
+        info_reserva_frame = ttk.Frame(self.frame_info)
+        info_reserva_frame.pack(pady=10)
+
+        datos_reserva = [
+            f"Código: {reserva_dict['id']}",
+            f"Fecha: {reserva_dict['fecha']}",
+            f"Total: ${reserva_dict['total']:,.0f}",
+            f"Estado: {reserva_dict['estado']}"
+        ]
+
+        for i, texto in enumerate(datos_reserva):
+            fila = i // 3
+            columna = i % 3
+
+            ttk.Label(
+                info_reserva_frame,
+                text=texto,
+                font=("Arial", 14),
+                padding=10
+            ).grid(
+                row=fila,
+                column=columna,
+                padx=15,
+                pady=10,
+                sticky="w"
+            )
+
+        #linea para separar
+        ttk.Separator(self.frame_info, orient="horizontal").pack(fill="x", pady=15)
+
+        # ================= infotmacion cliente =================
+        ttk.Label(
+            self.frame_info,
+            text="Información del Cliente",
+            font=("Arial", 18)
+        ).pack(pady=5)
+
+        info_cliente_frame = ttk.Frame(self.frame_info)
+        info_cliente_frame.pack(pady=10)
+
+        datos_cliente = [
+            f"ID: {reserva_dict['cliente_id']}",
+            f"Nombre: {nombre_cliente}",
+            f"Teléfono: {telefonoCL}",
+            f"Correo: {correoCL}",
+            f"Tipo: {tipoCL}"
+        ]
+
+        for i, texto in enumerate(datos_cliente):
+            fila = i // 3
+            columna = i % 3
+
+            ttk.Label(
+                info_cliente_frame,
+                text=texto,
+                font=("Arial", 14),
+                padding=10
+            ).grid(
+                row=fila,
+                column=columna,
+                padx=8,
+                pady=8,
+                sticky="w"
+            )
+            
+        ttk.Separator(self.frame_info, orient="horizontal").pack(fill="x", pady=15)
+        
+        #info servicios==============================================================
+        
+         # ================= infotmacion cliente =================
+        ttk.Label(
+            self.frame_info,
+            text="Servicios Contratados",
+            font=("Arial", 18)
+        ).pack(pady=5)
+        
+        self.tabla_servicios_contratados = ttk.Treeview(
+        self,
+        columns=("id", "nombre", "detalle", "tarifa"),  
+        show="headings",
+        height=10,
+        )
+
+        self.tabla_servicios_contratados.heading("id", text="ID")
+        self.tabla_servicios_contratados.heading("nombre", text="Nombre Servicio")
+        self.tabla_servicios_contratados.heading("detalle", text="Detalles")
+        self.tabla_servicios_contratados.heading("tarifa", text="Tarifa")
+
+    # ================= columnas =================
+        self.tabla_servicios_contratados.column("id", width=80, anchor="center")
+        self.tabla_servicios_contratados.column("nombre", width=200, anchor="center")
+        self.tabla_servicios_contratados.column("detalle", width=150, anchor="center")
+        self.tabla_servicios_contratados.column("tarifa", width=80, anchor="center")
+
+        self.tabla_servicios_contratados.pack(pady=15)
+        self.tabla_servicios_contratados.delete(*self.tabla_servicios_contratados.get_children())
+        
+        if reserva_dict:
+
+            servicios = reserva_dict.get("servicios", [])
+
+            for servicio in servicios:
+
+                #descripción (duración + detalles)
+                if servicio.get("_ServicioSala__horas"):
+                    descripcion = f"{servicio.get('_ServicioSala__horas')} horas"
+
+                elif servicio.get("_ServicioEquipo__dias"):
+                    descripcion = (
+                        f"{servicio.get('_ServicioEquipo__dias')} días - "
+                        f"{servicio.get('_ServicioEquipo__tipo_equipo')} "
+                        f"(x{servicio.get('_ServicioEquipo__cantidad')})"
+                    )
+
+                elif servicio.get("_ServicioAsesoria__horas"):
+                    descripcion = (
+                        f"{servicio.get('_ServicioAsesoria__horas')} horas - "
+                        f"{servicio.get('_ServicioAsesoria__nivel')}"
+                    )
+
+                else:
+                    descripcion = "N/A"
+
+                #tarifa
+                tarifa = (
+                    servicio.get("_ServicioSala__tarifa_por_hora")
+                    or servicio.get("_ServicioEquipo__tarifa_dia")
+                    or servicio.get("_ServicioAsesoria__tarifa_horas")
+                )
+
+                self.tabla_servicios_contratados.insert(
+                    "",
+                    "end",
+                    values=(
+                        servicio.get("_Servicio__id"),
+                        servicio.get("_Servicio__nombre"),
+                        descripcion,
+                        tarifa if tarifa is not None else "N/A"
+                    )
+                )
+                
+            # =====================Lista de de estados================================
+            
+        self.frame_selector = ttk.Frame(self)
+        self.frame_selector.pack(pady=5)
+        self.codigo_reserva = reserva_dict['id']
+        self.estado_actual = reserva_dict['estado']#estado actual 
+        
+        self.estado_entry = self.lista_desplegable(
+            self.frame_selector,
+            "Estado:",
+            0,
+            0,
+            [
+                "Seleccione un estado",
+                "Confirmar",
+                "Cancelar"
+            ]
+        )
+
+        
+        #==============================botonces de accion=======================================
+        frame_botones = ttk.Frame(self)
+        frame_botones.pack(pady=10)
+        ttk.Button(
+            frame_botones,
+            text="Actualizar Estado",
+            bootstyle="success",
+            command=self.cambiar_estado,
+        ).grid(row=0, column=0, padx=10)
+        
+        ttk.Button(
+            frame_botones,
+            text="Atrás",
+            bootstyle="warning",
+            command=self.show_home,
+            ).grid(row=0, column=1, padx=10)
+
+
+                
         
        
         
@@ -1796,17 +2141,211 @@ class App(ttk.Window):
 
     def crear_reserva(self):
         
-        messagebox.showinfo("Success", "Reserva creada")
-            
-    
-    
-           
+        hoy = datetime.now().date()
         
+        #validacion============================================
+        
+        #se verifica que haya objectos en el carritos
+        if not self.carrito.servi_multi:
+            messagebox.showwarning("Verificar", "El carrito está vacío")
+            return
+        
+        #se pide la fecha de la reserva al usuario
+        fecha = simpledialog.askstring(
+            "Fecha",
+            "Fecha de la reserva:",
+            initialvalue= hoy,
+            parent=self
+        )
+        
+        #validaciones
+        if not fecha:
+            messagebox.showwarning("Verificar", "Debe ingresar una fecha")
+            return
+
+        try:
+            fecha_valida = datetime.strptime(fecha, "%Y-%m-%d")
+        except ValueError:
+            messagebox.showerror("Error", "Formato de fecha inválido. Use YYYY-MM-DD")
+            return
+        
+
+        if fecha_valida.date() < hoy:
+            messagebox.showerror("Error", "La fecha no puede ser pasada")
+            return
+        
+       
+        cliente = self.carrito.cliente_id
+
+        # tomar la lista
+        servicio = self.carrito.servi_multi
+        #print(servicio)
+
+        total = self.carrito.total(
+            cliente_premium=(self.carrito.tipo == "premium"),
+            cupon=self.var_cupon.get()
+        )
+
+        try:
+            reserva_crear = self.reserva.crear_reservas(
+                cliente,
+                servicio,
+                fecha,
+                total
+            )
+
+            messagebox.showinfo("Success", "Reserva creada")
+            self.carrito.limpiar()
+            self.actualizar_carritoMulti()
+            self.calcular_total()
+            self.show_cliente_reserva()
             
+
+        except ValueError as e:
+            # errores controlados del sistema
+            messagebox.showerror("Error", str(e))
+
+        except Exception as e:
+            # errores inesperados
+            messagebox.showerror("Error", "Ocurrió un error inesperado")
+            print(e)
+            
+    #============================se cargan las reservas en tabla==============
+            
+    def cargar_reservas(self, filtro="todos"):
+
+        self.tabla_reservas.delete(*self.tabla_reservas.get_children())
+
+        clientes = self.cl_repo.get_clientes_registrados()
+
+        mostrar_reservas = self.reserva.obtener_reservas()
+
+        for r in mostrar_reservas:
+
+            #se filtra por estado
+            if filtro != "todos" and r["estado"] != filtro:
+                continue
+
+            nombre_cliente = next(
+                (c.nombre for c in clientes if c.id == r["cliente_id"]),
+                "Desconocido"
+            )
+
+            self.tabla_reservas.insert(
+                "",
+                "end",
+                values=(
+                    r["id"],
+                    nombre_cliente,
+                    r["fecha"],
+                    r["estado"]
+                )
+            )
+            
+    #================================================================================
+      
+    def reservas_dinamicas(self, event):
+        
+        filtro = self.estado_reserva_entry.get()
+
+        mapa = {
+            "Seleccione un estado" : "todos",
+            "Confirmadas": "confirmado",
+            "Canceladas": "cancelado",
+            "Pendientes": "pendiente"
+        }
+
+        filtro = mapa.get(filtro, "todos")
+
+        self.cargar_reservas(filtro)
+        #print(filtro)
+        #messagebox.showinfo("hello", "hello")  
+        
+#=================Info reserva y cambio de estado============================================
+
+    def info_reserva(self):
+        
+        seleccion = self.tabla_reservas.focus()
+
+        if not seleccion:
+            messagebox.showerror("Error", "Seleccione una reserva")
+            return
+        
+        datos = self.tabla_reservas.item(seleccion, "values")
+        
+        
+        # pasar a otra función
+        self.show_info_reserva(datos)
+        
+#=====================================cambiar estado reserva========================================================
+
+    def cambiar_estado(self):
+        
+        estado_seleccionado = self.estado_entry.get()
+
+        estado_mapa = {
+            "Confirmar": "confirmado",
+            "Cancelar": "cancelado"
+        }
+
+        estado = estado_mapa.get(estado_seleccionado)
+        
+        if self.estado_actual == "cancelado":
+            messagebox.showwarning("Atención", "No se puede modificar una reserva cancelada.")
+            self.logger.log(
+            "ERROR",
+            f"Intento de modificación de reserva cancelada. RESERVA: {self.codigo_reserva}"
+            )
+            return
+
+        if estado_seleccionado == "Seleccione un estado":
+            messagebox.showerror("Error", "Seleccione un estado.")
+            return
+
+        if self.estado_actual == estado:
+            messagebox.showwarning(
+                "Atención",
+                "La reserva ya se encuentra en ese estado."
+            )
+            return
+
+        #se confirma por si acaso
+        respuesta = messagebox.askyesno(
+            "Confirmar cambio",
+            f"¿Seguro que deseas cambiar el estado de la reserva a '{estado}'?"
+        )
+
+        if not respuesta:
+            return
+        
+        self.reserva.cambiar_estado_reserva(self.codigo_reserva, estado)
+        
+        messagebox.showinfo("Success", "El estado de la reserva ha sido cambiado exitosamente")
+        
+        reservas = self.reserva.obtener_reservas()
+        
+        #obtenemos y arreglamos los datos para actualizar la pantalla
+
+        reserva_actual = next(
+            (r for r in reservas if r["id"] == self.codigo_reserva),
+            None
+        )
+
+        if reserva_actual:
+
+            datos = (
+                reserva_actual["id"],
+                reserva_actual["cliente_id"],
+                reserva_actual["fecha"],
+                reserva_actual["estado"]
+            )
+
+            self.show_info_reserva(datos)
+        
         
                 
-
-       
+        
+        
                         
 # ================================= EJECUCION PROGRAMA ==========================================
 if __name__ == "__main__":
