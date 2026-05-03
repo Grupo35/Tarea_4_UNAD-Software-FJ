@@ -1,0 +1,112 @@
+[
+    {
+        "id": "RES-0001",
+        "cliente_id": 64500265,
+        "servicios": [
+            {
+                "_Servicio__id": 1104,
+                "_Servicio__nombre": "Sala Empresarial Plus",
+                "_ServicioSala__horas": 1,
+                "_ServicioSala__tarifa_por_hora": 120000
+            },
+            {
+                "_Servicio__id": 2101,
+                "_Servicio__nombre": "Proyector Full HD",
+                "_ServicioEquipo__tipo_equipo": "Proyector",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 50000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2104,
+                "_Servicio__nombre": "Pantalla LED 65 Pulgadas",
+                "_ServicioEquipo__tipo_equipo": "Pantalla",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 90000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2105,
+                "_Servicio__nombre": "Laptop Empresarial",
+                "_ServicioEquipo__tipo_equipo": "Computo",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 75000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2103,
+                "_Servicio__nombre": "Micr\u00f3fonos Inal\u00e1mbricos",
+                "_ServicioEquipo__tipo_equipo": "Audio",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 20000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2102,
+                "_Servicio__nombre": "Sistema de Sonido Profesional",
+                "_ServicioEquipo__tipo_equipo": "Audio",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 80000,
+                "_ServicioEquipo__cantidad": 2
+            },
+            {
+                "_Servicio__id": 3102,
+                "_Servicio__nombre": "Asesor\u00eda en Bases de Datos",
+                "_ServicioAsesoria__tipo_asesoria": "SQL / Modelado",
+                "_ServicioAsesoria__horas": 1,
+                "_ServicioAsesoria__tarifa_horas": 70000,
+                "_ServicioAsesoria__nivel": "b\u00e1sico"
+            },
+            {
+                "_Servicio__id": 3105,
+                "_Servicio__nombre": "Asesor\u00eda en Ciberseguridad",
+                "_ServicioAsesoria__tipo_asesoria": "Seguridad Inform\u00e1tica",
+                "_ServicioAsesoria__horas": 1,
+                "_ServicioAsesoria__tarifa_horas": 110000,
+                "_ServicioAsesoria__nivel": "b\u00e1sico"
+            }
+        ],
+        "fecha": "2026-05-02",
+        "estado": "confirmado",
+        "total": 695000
+    },
+    {
+        "id": "RES-0002",
+        "cliente_id": 93546856,
+        "servicios": [
+            {
+                "_Servicio__id": 1102,
+                "_Servicio__nombre": "Sala Reuniones Peque\u00f1a",
+                "_ServicioSala__horas": 1,
+                "_ServicioSala__tarifa_por_hora": 40000
+            },
+            {
+                "_Servicio__id": 2102,
+                "_Servicio__nombre": "Sistema de Sonido Profesional",
+                "_ServicioEquipo__tipo_equipo": "Audio",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 80000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 2105,
+                "_Servicio__nombre": "Laptop Empresarial",
+                "_ServicioEquipo__tipo_equipo": "Computo",
+                "_ServicioEquipo__dias": 1,
+                "_ServicioEquipo__tarifa_dia": 75000,
+                "_ServicioEquipo__cantidad": 1
+            },
+            {
+                "_Servicio__id": 3105,
+                "_Servicio__nombre": "Asesor\u00eda en Ciberseguridad",
+                "_ServicioAsesoria__tipo_asesoria": "Seguridad Inform\u00e1tica",
+                "_ServicioAsesoria__horas": 1,
+                "_ServicioAsesoria__tarifa_horas": 110000,
+                "_ServicioAsesoria__nivel": "b\u00e1sico"
+            }
+        ],
+        "fecha": "2026-05-03",
+        "estado": "confirmado",
+        "total": 324987.5
+    }
+]

@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1193456854,
+        "nombre": "Fernando Jimenez Cuerdas",
+        "telefono": "3025458752",
+        "email": "fernandojimenez@yahoo.com",
+        "tipo": "normal"
+    },
+    {
+        "id": 22546895,
+        "nombre": "Maria Jose Sanchez",
+        "telefono": "3112547856",
+        "email": "mari@hotmail.com",
+        "tipo": "normal"
+    },
+    {
+        "id": 93546856,
+        "nombre": "Francisco Pe\u00f1a Rodriguez",
+        "telefono": "3124568545",
+        "email": "franzo@gmail.com",
+        "tipo": "premium"
+    },
+    {
+        "id": 64500265,
+        "nombre": "Ana Maria Juarez",
+        "telefono": "3156458799",
+        "email": "anamaria@yahoo..com",
+        "tipo": "normal"
+    }
+]
