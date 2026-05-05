@@ -48,6 +48,11 @@ class ReservaController:
 
         if fecha_valida.date() < hoy:
             messagebox.showerror("Error", "La fecha no puede ser pasada")
+            
+            self.logger.log(
+                    "ERROR",
+                    f"Creación de reserva fallida | fecha={fecha_valida} | motivo=fecha pasada"
+                )
             return
 
         cliente = self.carrito.cliente_id
@@ -92,12 +97,12 @@ class ReservaController:
         self.app.tabla_reservas.delete(*self.app.tabla_reservas.get_children())
 
         clientes = self.cl_repo.get_clientes_registrados()
-
         mostrar_reservas = self.reserva.obtener_reservas()
+
+        hay_datos = False
 
         for r in mostrar_reservas:
 
-            #se filtra por estado
             if filtro != "todos" and r["estado"] != filtro:
                 continue
 
@@ -116,6 +121,20 @@ class ReservaController:
                     r["estado"]
                 )
             )
+
+            hay_datos = True
+
+        #Mostrar y ocultar mensaje
+        if not hay_datos:
+            if filtro == "todos":
+                mensaje = "No hay reservas registradas"
+            else:
+                mensaje = f"No hay reservas en estado: {filtro}"
+
+            self.app.lbl_mensaje.config(text=mensaje)
+            self.app.lbl_mensaje.pack()
+        else:
+            self.app.lbl_mensaje.pack_forget()
 
 
 #================================================================================
@@ -180,6 +199,11 @@ class ReservaController:
             messagebox.showwarning(
                 "Atención",
                 "La reserva ya se encuentra en ese estado."
+            )
+            
+            self.logger.log(
+                "ERROR",
+                f"Intento de actualizar reserva sin cambios | RERSERVA: {self.app.codigo_reserva} | Estado: {self.app.estado_actual}"
             )
             return
 

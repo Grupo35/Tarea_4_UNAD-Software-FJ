@@ -28,6 +28,11 @@ class CarritoController:
 
             if not servicio_base:
                 messagebox.showerror("Error", "Servicio no encontrado")
+                
+                self.logger.log(
+                    "ERROR",
+                    f"Servicio no encontrado"
+                )
                 return
 
             tipo = self.app.servicio_tipo_entry.get()

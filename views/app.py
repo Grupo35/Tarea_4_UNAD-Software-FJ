@@ -45,6 +45,7 @@ class App(ttk.Window):
             self.logger
         )
         
+       
         
         self.show_home()#iniciamos la pantalla principal
         
@@ -119,6 +120,14 @@ class App(ttk.Window):
         self.frame_info.pack(pady=10)
         self.frame_selector = ttk.Frame(self)
         self.frame_selector.pack(pady=5)
+        # se crea el frame
+        self.frame_reservas = tk.Frame(self)
+        self.frame_reservas.pack()
+
+        # se crea el label para mostrar el mensaje
+        self.lbl_mensaje = tk.Label(self.frame_reservas, text="", fg="gray")
+        self.lbl_mensaje.pack()
+        self.lbl_mensaje.pack_forget()
         
         ttk.Label(
             self.frame_info,
