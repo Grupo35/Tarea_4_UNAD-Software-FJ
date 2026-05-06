@@ -1,66 +1,28 @@
- #-------------------------------------------------------------------
-  #-----------------------Clientes--------------------
-  #-------------------------------------------------------------------   
-class Cliente:
-    def __init__(self, id, nombre, telefono, email, tipo="normal"):
-        self.id = id
-        self.__nombre = nombre
-        self.telefono = telefono
-        self.email = email
-        self.tipo = tipo
-        
-    @property
-    def id(self):
-        return self.__id
+# Importaciones necesarias para manejo de archivos y fecha/hora
+import os
+from datetime import datetime
+
+#-------------------------------------------------------------------
+#----------------------- SISTEMA DE LOGS ----------------------------
+#-------------------------------------------------------------------   
+class Logger:
     
-    @id.setter
-    def id(self, valor):
-        if not isinstance(valor, int) or valor <= 0:
-            raise ValueError("ID inválido")
-        
-        self.__id = valor 
-        
-    @property
-    def nombre(self):
-        return self.__nombre
+    # Ruta donde se almacenará el archivo de registro (logs)
+    FILE_PATH = "data/logs/logs.txt"
     
-    @property
-    def telefono(self):
-        return self.__telefono
-    
-    @telefono.setter
-    def telefono(self, valor):
-        if not isinstance(valor, str) or not valor.isdigit():
-            raise ValueError("Teléfono debe contener solo números")
-                
-        self.__telefono = valor
-    
-    @property
-    def email(self):
-        return self.__email
-    
-    @email.setter
-    def email(self, valor):
-        if "@" not in valor:
-            raise ValueError("Email inválido")
+    def _init_(self):
+        # Crea la carpeta de logs si no existe
+        # Evita errores si la carpeta ya está creada
+        os.makedirs("data/logs", exist_ok=True)
         
-        self.__email = valor
+    def log(self, nivel, mensaje):
+        # Obtiene la fecha y hora actual en formato año-mes-día hora:minuto:segundo
+        tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
-    @property
-    def tipo(self):
-        return self.__tipo
-    
-    @tipo.setter
-    def tipo(self, valor):
-        if valor not in ["normal", "premium"]:
-            raise ValueError("Tipo debe ser normal o premium")
-        
-        self.__tipo = valor    
-        
-    def es_premium(self):
-        return self.__tipo == "premium"
-    
-    def __str__(self):
-        return f"Cliente: {self.__nombre} | ID: {self.__id} | Tipo: {self.__tipo}"
+        # Abre el archivo en modo agregar (no borra información previa)
+        # Permite escribir caracteres especiales gracias a UTF-8
+        with open(self.FILE_PATH, "a", encoding="utf-8") as f:
+            # Guarda el mensaje con el formato: [fecha] NIVEL: mensaje
+            f.write(f"[{tiempo}] {nivel}: {mensaje}\n")
     
     
