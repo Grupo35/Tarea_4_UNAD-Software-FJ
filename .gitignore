@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+log.txt
+data/logs/
+data/storage/
