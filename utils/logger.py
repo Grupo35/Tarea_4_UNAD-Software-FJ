@@ -9,7 +9,7 @@ class Logger:
     
     FILE_PATH = "data/logs/logs.txt"
     
-    def _init_(self):
+    def __init__(self):
         os.makedirs("data/logs", exist_ok=True)
         
     def log(self, nivel, mensaje):
