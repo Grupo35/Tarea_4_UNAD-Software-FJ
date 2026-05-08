@@ -82,3 +82,28 @@
 [2026-05-03 00:14:56] INFO: Reserva creada ID RES-0002
 [2026-05-03 00:14:57] INFO: Cliente 93546856 ha formateado el carrito
 [2026-05-03 00:15:09] INFO: Estado de la reserva: RES-0002 ha sido cambiado a confirmado
+[2026-05-04 20:52:06] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:52:09] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:52:11] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:52:12] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:55:48] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:55:53] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:55:57] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:55:59] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:56:00] ERROR: Error leyendo reservas: Expecting value: line 1 column 1 (char 0)
+[2026-05-04 20:56:39] INFO: Cliente 64500265 ha formateado el carrito
+[2026-05-04 20:56:39] INFO: Cliente 64500265 ha cancelado la operación de reserva
+[2026-05-04 20:59:50] INFO: Cliente 64500265 ha formateado el carrito
+[2026-05-04 20:59:51] INFO: Cliente 64500265 ha formateado el carrito
+[2026-05-04 20:59:53] INFO: Cliente 64500265 ha formateado el carrito
+[2026-05-04 20:59:53] INFO: Cliente 64500265 ha cancelado la operación de reserva
+[2026-05-04 21:03:39] ERROR: Intento de actualizar reserva sin cambios | id_reserva=RES-0002 | estado_actual=confirmado
+[2026-05-04 21:03:43] INFO: Estado de la reserva: RES-0002 ha sido cambiado a cancelado
+[2026-05-04 21:05:22] ERROR: Intento de actualizar reserva sin cambios | RERSERVA: RES-0001 | Estado: confirmado
+[2026-05-04 21:08:51] INFO: Cliente 1193456854 agregó Sala Creativa Multimedia a su carrito
+[2026-05-04 21:08:54] WARNING: Cliente 1193456854 intentó agregar más de una sala
+[2026-05-04 21:08:58] INFO: Cliente 1193456854 agregó Sistema de Sonido Profesional a su carrito
+[2026-05-04 21:09:00] INFO: Cliente 1193456854 agregó Laptop Empresarial a su carrito
+[2026-05-04 21:09:04] INFO: Cliente 1193456854 agregó Sistema de Sonido Profesional a su carrito
+[2026-05-04 21:09:07] INFO: Cliente 1193456854 agregó Pantalla LED 65 Pulgadas a su carrito
+[2026-05-04 21:09:17] ERROR: Creación de reserva fallida | fecha=2026-05-03 00:00:00 | motivo=fecha pasada
